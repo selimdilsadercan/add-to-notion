@@ -94,7 +94,7 @@ def get_video(videoId):
     return videoeNotionId
 
 
-def create_path(properties, cover_url, icon_url):
+def create_video(properties, cover_url, icon_url):
     cover =  {
         "type": "external", 
         "external": {
