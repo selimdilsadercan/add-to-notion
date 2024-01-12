@@ -2,6 +2,7 @@ from notion import *
 from youtube import *
 from utils import *
 from scraper import *
+from website import *
 from pyperclip import waitForNewPaste
 import webbrowser
 
@@ -55,4 +56,23 @@ if "youtube" in url or "youtu.be" in url:
     webbrowser.open(f"https://www.notion.so/selimdilsadercn/Youtube-Videolar-aded04bff7814ef6ad418f8873cbcad2?p={created_data_id}&pm=c")
 
 else:
-    print("Yanlış URL")
+    favicon, allFavicons = get_favicon(url)
+    title = get_website_name(url)
+    print(title)
+
+    created_data_id = ""
+    try:
+        created_data_id = get_website(url)
+
+    except:
+        data = {
+            "İsim": {"title": [{"text": {"content": title}}]},
+            "allFavicons": {"rich_text": [{"text": {"content": allFavicons}}]},
+            "Web": {"url": url},
+        }
+
+        res, created_data_id = create_website(data, favicon)
+        print(res)
+
+    created_data_id = created_data_id.replace("-", "")
+    webbrowser.open(f"https://www.notion.so/selimdilsadercn/Uygulamalar-e40ccc17932a429587e93d2336713d3a?p={created_data_id}&pm=c")

@@ -8,6 +8,7 @@ load_dotenv()
 NOTION_TOKEN = os.getenv('NOTION_TOKEN')
 VIDEO_DATABASE= os.getenv('VIDEO_DATABASE')
 CHANNEL_DATABASE = os.getenv('CHANNEL_DATABASE')
+WEBSITE_DATABASE = os.getenv('WEBSITE_DATABASE')
 
 headers = {
     "Authorization": "Bearer " + NOTION_TOKEN,
@@ -15,16 +16,15 @@ headers = {
     "Notion-Version": "2022-06-28"
 }
 
-def get_path_list():
+# VIDEOS
+
+def get_videos():
     url = f"https://api.notion.com/v1/databases/{VIDEO_DATABASE}/query"
 
     payload = {"page_size": 9999000}
     response = requests.post(url, json=payload, headers=headers)
 
     data = response.json()  
-
-    # with open('db.json', "w", encoding='utf8') as f:
-    #    json.dump(data, f, ensure_ascii=False, indent=4)
 
     results = data["results"]
 
@@ -55,30 +55,6 @@ def find_database_id_video(index):
     database_id = data["results"][index]["id"]
 
     return database_id
-
-
-def get_kanal_list():
-    url = f"https://api.notion.com/v1/databases/{VIDEO_DATABASE}/query"
-
-    payload = {"page_size": 200}
-    response = requests.post(url, json=payload, headers=headers)
-
-    data = response.json()  
-
-    # with open('db.json', "w", encoding='utf8') as f:
-    #    json.dump(data, f, ensure_ascii=False, indent=4)
-
-    results = data["results"]
-    
-    urlList = []
-    for result in results:
-        try:
-            resultUrl = result["properties"]["Youtube URL"]["url"]
-            urlList.append(resultUrl)
-        except: 
-            pass
-
-    return urlList
 
 
 def get_video(videoId):
@@ -117,6 +93,32 @@ def create_video(properties, cover_url, icon_url):
     return res, res.json()["id"]
     
 
+# CHANNELS
+
+def get_kanal_list():
+    url = f"https://api.notion.com/v1/databases/{VIDEO_DATABASE}/query"
+
+    payload = {"page_size": 200}
+    response = requests.post(url, json=payload, headers=headers)
+
+    data = response.json()  
+
+    # with open('db.json', "w", encoding='utf8') as f:
+    #    json.dump(data, f, ensure_ascii=False, indent=4)
+
+    results = data["results"]
+    
+    urlList = []
+    for result in results:
+        try:
+            resultUrl = result["properties"]["Youtube URL"]["url"]
+            urlList.append(resultUrl)
+        except: 
+            pass
+
+    return 
+
+
 def create_kanal(properties, icon_url):
     icon =  {
         "type": "external", 
@@ -133,3 +135,30 @@ def create_kanal(properties, icon_url):
     return res, res.json()["id"]
 
 
+
+# WEBSITES
+
+def get_website(link):
+    url = f"https://api.notion.com/v1/databases/{WEBSITE_DATABASE}/query"
+
+    payload = {"page_size": 1, "filter": {"property": "Web", "url": {"contains": link}}}
+    response = requests.post(url, json=payload, headers=headers)
+
+    data = response.json()
+
+    return data["results"][0]["id"]
+
+def create_website(properties, icon_url):
+    icon =  {
+        "type": "external", 
+        "external": {
+            "url": icon_url
+        }
+    }
+
+    create_url = "https://api.notion.com/v1/pages"
+
+    payload = {"parent": {"database_id": WEBSITE_DATABASE}, "properties": properties, "icon": icon}
+
+    res = requests.post(create_url, headers=headers, json=payload)
+    return res, res.json()["id"]
