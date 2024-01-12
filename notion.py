@@ -9,6 +9,7 @@ NOTION_TOKEN = os.getenv('NOTION_TOKEN')
 VIDEO_DATABASE= os.getenv('VIDEO_DATABASE')
 CHANNEL_DATABASE = os.getenv('CHANNEL_DATABASE')
 WEBSITE_DATABASE = os.getenv('WEBSITE_DATABASE')
+VSCODE_ADDON_DATABASE = os.getenv('VSCODE_ADDON_DATABASE')
 
 headers = {
     "Authorization": "Bearer " + NOTION_TOKEN,
@@ -159,6 +160,33 @@ def create_website(properties, icon_url):
     create_url = "https://api.notion.com/v1/pages"
 
     payload = {"parent": {"database_id": WEBSITE_DATABASE}, "properties": properties, "icon": icon}
+
+    res = requests.post(create_url, headers=headers, json=payload)
+    return res, res.json()["id"]
+
+## EKLENTİLER
+
+def get_eklenti(link):
+    url = f"https://api.notion.com/v1/databases/{VSCODE_ADDON_DATABASE}/query"
+
+    payload = {"page_size": 1, "filter": {"property": "Link", "url": {"contains": link}}}
+    response = requests.post(url, json=payload, headers=headers)
+
+    data = response.json()
+
+    return data["results"][0]["id"]
+
+def create_eklenti(properties, icon_url):
+    icon =  {
+        "type": "external", 
+        "external": {
+            "url": icon_url
+        }
+    }
+
+    create_url = "https://api.notion.com/v1/pages"
+
+    payload = {"parent": {"database_id": VSCODE_ADDON_DATABASE}, "properties": properties, "icon": icon}
 
     res = requests.post(create_url, headers=headers, json=payload)
     return res, res.json()["id"]

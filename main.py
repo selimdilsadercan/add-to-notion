@@ -55,6 +55,29 @@ if "youtube" in url or "youtu.be" in url:
     created_data_id = created_data_id.replace("-", "")
     webbrowser.open(f"https://www.notion.so/selimdilsadercn/Youtube-Videolar-aded04bff7814ef6ad418f8873cbcad2?p={created_data_id}&pm=c")
 
+
+elif "marketplace.visualstudio.com" in url:
+    title, imageUrl = get_eklenti_infos(url)
+    print(title)
+
+    created_data_id = ""
+    try:
+        created_data_id = get_eklenti(url)
+
+    except:
+        data = {
+            "İsim": {"title": [{"text": {"content": title}}]},
+            "Link": {"url": url},
+            "Tags": {"multi_select": [{"name": "Diğer", "color": "default"}]},
+        }
+
+        res, created_data_id = create_eklenti(data, imageUrl)
+        print(res)
+
+    created_data_id = created_data_id.replace("-", "")
+    webbrowser.open(f"https://www.notion.so/selimdilsadercn/Vs-Code-Eklentileri-531399ee6fed46aba2c9ae1211fbc355")
+
+
 else:
     favicon, allFavicons = get_favicon(url)
     title = get_website_name(url)

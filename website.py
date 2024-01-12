@@ -27,3 +27,16 @@ def get_website_name(url):
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
         return url.split(".")[1]
+
+
+def get_eklenti_infos(url):
+    response = requests.get(url)
+    response.raise_for_status()
+
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    title = soup.find('span', class_="ux-item-name").text
+    imageUrl = soup.find('img', class_="image-display")["src"]
+
+    return title, imageUrl
+
