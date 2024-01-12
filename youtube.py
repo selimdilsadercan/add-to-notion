@@ -30,7 +30,7 @@ def get_video_infos(video_url:str):
 
     cover_img_url = get_thumbnail(video_url)
 
-    return title, duration, channel_url, channel_name, cover_img_url, video_id
+    return title, duration, channel_url, channel_name, cover_img_url
 
 
 
