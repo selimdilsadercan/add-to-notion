@@ -78,6 +78,29 @@ elif "marketplace.visualstudio.com" in url:
     webbrowser.open(f"https://www.notion.so/selimdilsadercn/Vs-Code-Eklentileri-531399ee6fed46aba2c9ae1211fbc355")
 
 
+elif "github.com" in url:
+    title, description = get_repo_infos(url)
+    print(title)
+
+    created_data_id = ""
+
+    try:
+        created_data_id = get_repo(url)
+
+    except:
+        data = {
+            "Name": {"title": [{"text": {"content": title}}]},
+            "Link": {"url": url},
+            "Description": {"rich_text": [{"text": {"content": description}}]},
+        }
+
+        res, created_data_id = create_repo(data)
+        print(res)
+
+    created_data_id = created_data_id.replace("-", "")
+    webbrowser.open(f"https://www.notion.so/selimdilsadercn/Github-Repositories-6b85365429944cd3b0a19ceb1ecdf2a8?p={created_data_id}&pm=c")
+
+
 else:
     favicon, allFavicons = get_favicon(url)
     title = get_website_name(url)
@@ -92,6 +115,7 @@ else:
             "İsim": {"title": [{"text": {"content": title}}]},
             "allFavicons": {"rich_text": [{"text": {"content": allFavicons}}]},
             "Web": {"url": url},
+            "Tür": {"multi_select": [{"name": "Web", "color": "default"}]},
         }
 
         res, created_data_id = create_website(data, favicon)

@@ -32,11 +32,22 @@ def get_website_name(url):
 def get_eklenti_infos(url):
     response = requests.get(url)
     response.raise_for_status()
-
     soup = BeautifulSoup(response.text, 'html.parser')
 
     title = soup.find('span', class_="ux-item-name").text
     imageUrl = soup.find('img', class_="image-display")["src"]
 
     return title, imageUrl
+
+
+def get_repo_infos(url):
+    response = requests.get(url)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    title = url.split("github.com/")[1]  
+    about_h2 = soup.find("h2", string="About")
+    description = about_h2.find_next_sibling("p").text.strip()
+
+    return title, description
 
