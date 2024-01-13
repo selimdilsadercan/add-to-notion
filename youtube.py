@@ -67,14 +67,12 @@ def get_playlist_infos(playlist_url:str):
     playlist_title = response2["items"][0]["snippet"]["title"]
     playlist_image = response2["items"][0]["snippet"]["thumbnails"]["high"]["url"]
 
-    totalDuration = 0
-
     channel_name = response["items"][0]["snippet"]["videoOwnerChannelTitle"]
 
     channel_id = response["items"][0]["snippet"]["videoOwnerChannelId"]
     channel_url = f"https://www.youtube.com/channel/{channel_id}"
 
-    return playlist_title, totalDuration, channel_url, channel_name, playlist_image
+    return playlist_title, -1, channel_url, channel_name, playlist_image
 
 if __name__ == '__main__':
     print(get_playlist_infos("https://www.youtube.com/playlist?list=PLruhrmh5oDvx4gsN3DtTW9cIl82Y3HXdo"))
