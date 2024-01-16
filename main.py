@@ -6,6 +6,8 @@ from website import *
 from pyperclip import waitForNewPaste
 import webbrowser
 
+load_dotenv()
+selim = True if os.getenv('AUTHOR') == "selim" else False
 
 print("Bir URL kopyala (yeni olması lazım)")
 url = waitForNewPaste()
@@ -29,6 +31,7 @@ if "youtube" in url or "youtu.be" in url:
         kanal_data = {
             "İsim": {"title": [{"text": {"content": channel_name}}]},
             "Youtube URL": {"url": channel_url},
+            "selim": {"checkbox": selim},
         }
 
         status, created_database_id = create_kanal(kanal_data, channel_img_url)
@@ -46,6 +49,7 @@ if "youtube" in url or "youtu.be" in url:
             "Dakika": {"number": duration},
             "Kanal": {"relation": [{"id": created_database_id}]},
             "youtubeId": {"rich_text": [{"text": {"content": video_id}}]},
+            "selim": {"checkbox": selim},
         }
 
         icon_url = "https://cdn-icons-png.flaticon.com/512/1384/1384060.png"
@@ -69,6 +73,7 @@ elif "marketplace.visualstudio.com" in url:
             "İsim": {"title": [{"text": {"content": title}}]},
             "Link": {"url": url},
             "Tags": {"multi_select": [{"name": "Diğer", "color": "default"}]},
+            "selim": {"checkbox": selim},
         }
 
         res, created_data_id = create_eklenti(data, imageUrl)
@@ -92,6 +97,7 @@ elif "github.com" in url:
             "Name": {"title": [{"text": {"content": title}}]},
             "Link": {"url": url},
             "Description": {"rich_text": [{"text": {"content": description}}]},
+            "selim": {"checkbox": selim},
         }
 
         res, created_data_id = create_repo(data)
@@ -116,6 +122,7 @@ else:
             "allFavicons": {"rich_text": [{"text": {"content": allFavicons}}]},
             "Web": {"url": url},
             "Tür": {"multi_select": [{"name": "Web", "color": "default"}]},
+            "selim": {"checkbox": selim},
         }
 
         res, created_data_id = create_website(data, favicon)
