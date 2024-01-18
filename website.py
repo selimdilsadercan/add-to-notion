@@ -6,8 +6,8 @@ def get_favicon(url):
     icons = favicon.get(url)
     icon = icons[0]
     urls = [icon.url for icon in icons]
-    allFavicons = ' - '.join(urls)
-    return icon.url, allFavicons
+    assets = ' - '.join(urls)
+    return icon.url, assets
 
 
 def get_website_name(url):
