@@ -3,6 +3,7 @@ from youtube import *
 from utils import *
 from scraper import *
 from website import *
+from gpt import *
 from pyperclip import waitForNewPaste
 import webbrowser
 
@@ -14,6 +15,7 @@ url = waitForNewPaste()
 
 
 if "youtube" in url or "youtu.be" in url:
+    print("işlem: youtube")
     video_id = url.split("?list=")[1] if "playlist?list=" in url else get_video_id(url)
     url = url if "playlist?list=" in url else f"https://youtu.be/{video_id}"
     print(url)
@@ -61,6 +63,7 @@ if "youtube" in url or "youtu.be" in url:
 
 
 elif "marketplace.visualstudio.com" in url:
+    print("işlem: vscode eklentisi")
     title, imageUrl = get_eklenti_infos(url)
     print(title)
 
@@ -84,6 +87,7 @@ elif "marketplace.visualstudio.com" in url:
 
 
 elif "github.com" in url:
+    print("işlem: github")
     title, description = get_repo_infos(url)
     print(title)
 
@@ -108,9 +112,12 @@ elif "github.com" in url:
 
 
 else:
-    favicon, allFavicons = get_favicon(url)
-    title = get_website_name(url)
-    print(title)
+    print("işlem: website")
+    favicon, assets = get_favicon(url)
+    titleTag = get_website_name(url)
+    title, description = get_website_title_and_description(titleTag)
+
+    print(title + " - " + description)
 
     created_data_id = ""
     try:
@@ -119,7 +126,8 @@ else:
     except:
         data = {
             "İsim": {"title": [{"text": {"content": title}}]},
-            "allFavicons": {"rich_text": [{"text": {"content": allFavicons}}]},
+            "Description": {"rich_text": [{"text": {"content": description}}]},
+            "assets": {"rich_text": [{"text": {"content": assets}}]},
             "Web": {"url": url},
             "Tür": {"multi_select": [{"name": "Web", "color": "default"}]},
             "selim": {"checkbox": selim},

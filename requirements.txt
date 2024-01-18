@@ -1,6 +1,6 @@
 google-api-python-client==2.74.0
 pyperclip==1.8.2
-requests==2.82.2
+requests>=2.29.0
 isodate==0.6.1
 python-dotenv==1.0.0
 favicon==0.7.0
