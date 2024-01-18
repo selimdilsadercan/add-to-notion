@@ -22,11 +22,11 @@ def get_website_name(url):
         if title_tag:
             return title_tag.text.strip()
         else:
-            return url.split(".")[1]
+            raise Exception("Title tag not found")
 
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
-        return url.split(".")[1]
+        return url.split(".")[0].split("://")[1].title() if "www." not in url else url.split(".")[1]
 
 
 def get_eklenti_infos(url):
@@ -50,4 +50,3 @@ def get_repo_infos(url):
     description = about_h2.find_next_sibling("p").text.strip()
 
     return title, description
-
