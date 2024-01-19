@@ -115,7 +115,7 @@ else:
     print("işlem: website")
     favicon, assets = get_favicon(url)
     titleTag = get_website_name(url)
-    title, description = get_website_title_and_description(titleTag)
+    title, description = get_website_title_and_description(titleTag, url)
 
     print(title + " - " + description)
 
