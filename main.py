@@ -117,6 +117,9 @@ else:
     titleTag = get_website_name(url)
     title, description = get_website_title_and_description(titleTag, url)
 
+    if url[-1] == "/":
+        url = url[:-1]
+
     print(title + " - " + description)
 
     created_data_id = ""
