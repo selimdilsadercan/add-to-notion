@@ -47,6 +47,9 @@ def get_repo_infos(url):
 
     title = url.split("github.com/")[1]  
     about_h2 = soup.find("h2", string="About")
-    description = about_h2.find_next_sibling("p").text.strip()
+    try:
+        description = about_h2.find_next_sibling("p").text.strip()
+    except:
+        description = ""
 
     return title, description
