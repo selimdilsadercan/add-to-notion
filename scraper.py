@@ -7,6 +7,9 @@ def get_channel_infos(channel_url):
     soup = BeautifulSoup(request, "lxml")
 
     img= soup.body.find("link", rel="image_src")["href"]
-    return img
-    
-# print(get_channel_infos("https://www.youtube.com/watch?v=vLhZbNqKRTU&ab_channel=FlutterGuys"))
+    url = soup.body.find("link", rel="canonical")["href"]
+    name = soup.body.find("meta", itemprop="name")["content"]
+    return img, url, name
+
+if __name__ == "__main__":
+    print(get_channel_infos("https://www.youtube.com/@kriss_drummer"))
