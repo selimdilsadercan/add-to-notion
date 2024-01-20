@@ -16,50 +16,65 @@ url = waitForNewPaste()
 
 if "youtube" in url or "youtu.be" in url:
     print("işlem: youtube")
-    video_id = url.split("?list=")[1] if "playlist?list=" in url else get_video_id(url)
-    url = url if "playlist?list=" in url else f"https://youtu.be/{video_id}"
-    print(url)
+    if "playlist?list" in  url:
+        video_id = url.split("?list=")[1]
+        url = url
+        print(url)
+        title, duration, channel_url, channel_name, image = get_playlist_infos(url)
+        channel_img_url = get_channel_infos(channel_url)
 
-    title, duration, channel_url, channel_name, image = get_playlist_infos(url) if  "playlist?list=" in url else get_video_infos(url)
-    channel_img_url = get_channel_infos(channel_url)
 
+    elif "youtu.be" in url or "watch?v=" in url:
+        video_id = get_video_id(url)
+        url = f"https://youtu.be/{video_id}"
+        print(url)
+        title, duration, channel_url, channel_name, image = get_video_infos(url)
+        channel_img_url = get_channel_infos(channel_url)
+    
+    else:
+        channel_img_url, channel_url, channel_name = get_channel_infos(url)
 
-    urlList = get_kanal_list()
+    created_channel_id = ""
     try:
-        index = urlList.index(channel_url)
-        created_database_id = find_database_id(index)
+        created_channel_id = get_kanal(channel_url);
 
     except:
         kanal_data = {
             "İsim": {"title": [{"text": {"content": channel_name}}]},
-            "Youtube URL": {"url": channel_url},
+            "URL": {"url": channel_url},
             "selim": {"checkbox": selim},
         }
 
-        status, created_database_id = create_kanal(kanal_data, channel_img_url)
-        print(status)
+        res1, created_channel_id = create_kanal(kanal_data, channel_img_url)
+        print(res1)
 
 
-    created_data_id = ""
-    try:
-        created_data_id = get_video(video_id);
+    if  "playlist?list" in url or "youtu.be" in url or "watch?v=" in url:
+        created_data_id = ""
+        try:
+            created_data_id = get_video(video_id);
 
-    except:
-        data = {
-            "Name": {"title": [{"text": {"content": title}}]},
-            "Link": {"url": url},
-            "Dakika": {"number": duration},
-            "Kanal": {"relation": [{"id": created_database_id}]},
-            "youtubeId": {"rich_text": [{"text": {"content": video_id}}]},
-            "selim": {"checkbox": selim},
-        }
+        except:
+            data = {
+                "Name": {"title": [{"text": {"content": title}}]},
+                "Link": {"url": url},
+                "Dakika": {"number": duration},
+                "Kanal": {"relation": [{"id": created_channel_id}]},
+                "youtubeId": {"rich_text": [{"text": {"content": video_id}}]},
+                "selim": {"checkbox": selim},
+            }
 
-        icon_url = "https://cdn-icons-png.flaticon.com/512/1384/1384060.png"
-        res, created_data_id = create_video(data, image, icon_url)
-        print(res)
+            icon_url = "https://cdn-icons-png.flaticon.com/512/1384/1384060.png"
+            res, created_data_id = create_video(data, image, icon_url)
+            print(res)
 
-    created_data_id = created_data_id.replace("-", "")
-    webbrowser.open(f"https://www.notion.so/selimdilsadercn/Youtube-Videolar-aded04bff7814ef6ad418f8873cbcad2?p={created_data_id}&pm=c")
+        created_data_id = created_data_id.replace("-", "")
+        webbrowser.open(f"https://www.notion.so/selimdilsadercn/Youtube-Videolar-aded04bff7814ef6ad418f8873cbcad2?p={created_data_id}&pm=c")
+
+    else: 
+        created_channel_id = created_channel_id.replace("-", "")
+        webbrowser.open(f"https://www.notion.so/selimdilsadercn/Kanallar-4ce985c43cf149a285a417307baf4f3f?p={created_channel_id}&pm=c")
+
 
 
 elif "marketplace.visualstudio.com" in url:
