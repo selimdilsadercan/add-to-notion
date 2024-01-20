@@ -18,46 +18,8 @@ headers = {
     "Notion-Version": "2022-06-28"
 }
 
+
 # VIDEOS
-
-def get_videos():
-    url = f"https://api.notion.com/v1/databases/{VIDEO_DATABASE}/query"
-
-    payload = {"page_size": 9999000}
-    response = requests.post(url, json=payload, headers=headers)
-
-    data = response.json()  
-
-    results = data["results"]
-
-    return results
-
-
-def find_database_id(index):
-    url = f"https://api.notion.com/v1/databases/{VIDEO_DATABASE}/query"
-
-    payload = {"page_size": 200}
-    response = requests.post(url, json=payload, headers=headers)
-
-    data = response.json()
-
-    database_id = data["results"][index]["id"]
-
-    return database_id
-
-
-def find_database_id_video(index):
-    url = f"https://api.notion.com/v1/databases/{VIDEO_DATABASE}/query"
-
-    payload = {"page_size": 200}
-    response = requests.post(url, json=payload, headers=headers)
-
-    data = response.json()  
-
-    database_id = data["results"][index]["id"]
-
-    return database_id
-
 
 def get_video(videoId):
     url = f"https://api.notion.com/v1/databases/{VIDEO_DATABASE}/query"
@@ -97,28 +59,15 @@ def create_video(properties, cover_url, icon_url):
 
 # CHANNELS
 
-def get_kanal_list():
-    url = f"https://api.notion.com/v1/databases/{VIDEO_DATABASE}/query"
+def get_kanal(link):
+    url = f"https://api.notion.com/v1/databases/{CHANNEL_DATABASE}/query"
 
-    payload = {"page_size": 200}
+    payload = {"page_size": 1, "filter": {"property": "URL", "url": {"contains": link}}}
     response = requests.post(url, json=payload, headers=headers)
 
-    data = response.json()  
+    data = response.json()
 
-    # with open('db.json', "w", encoding='utf8') as f:
-    #    json.dump(data, f, ensure_ascii=False, indent=4)
-
-    results = data["results"]
-    
-    urlList = []
-    for result in results:
-        try:
-            resultUrl = result["properties"]["Youtube URL"]["url"]
-            urlList.append(resultUrl)
-        except: 
-            pass
-
-    return 
+    return data["results"][0]["id"]
 
 
 def create_kanal(properties, icon_url):
@@ -163,6 +112,7 @@ def create_website(properties, icon_url):
     payload = {"parent": {"database_id": WEBSITE_DATABASE}, "properties": properties, "icon": icon}
 
     res = requests.post(create_url, headers=headers, json=payload)
+    print(res.json())
     return res, res.json()["id"]
 
 
@@ -193,6 +143,7 @@ def create_eklenti(properties, icon_url):
     res = requests.post(create_url, headers=headers, json=payload)
     return res, res.json()["id"]
 
+
 # REPOS
 
 def get_repo(link):
@@ -219,3 +170,9 @@ def create_repo(properties):
 
     res = requests.post(create_url, headers=headers, json=payload)
     return res, res.json()["id"]
+
+if __name__ == "__main__":
+    print(create_kanal(
+        {'İsim': {'title': [{'text': {'content': 'Sagopa Kajmer - Topic'}}]}, 'URL': {'url': 'https://www.youtube.com/channel/UCby21dqpwR_c8okl3K85_7A'}, 'selim': {'checkbox': True}},
+        "https://yt3.googleusercontent.com/QjtZ8P0nFMWnNRjOkpPO-psZDxWDW89gZbhMaKqMYswLMJ2tnMBlELOGS18koAV_10pQsIGy1Q=s176-c-k-c0x00ffffff-no-rj" 
+    ))
