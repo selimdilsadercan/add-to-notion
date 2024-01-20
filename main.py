@@ -21,7 +21,7 @@ if "youtube" in url or "youtu.be" in url:
         url = url
         print(url)
         title, duration, channel_url, channel_name, image = get_playlist_infos(url)
-        channel_img_url = get_channel_infos(channel_url)
+        channel_img_url, _, _ = get_channel_infos(channel_url)
 
 
     elif "youtu.be" in url or "watch?v=" in url:
@@ -29,7 +29,7 @@ if "youtube" in url or "youtu.be" in url:
         url = f"https://youtu.be/{video_id}"
         print(url)
         title, duration, channel_url, channel_name, image = get_video_infos(url)
-        channel_img_url = get_channel_infos(channel_url)
+        channel_img_url, _, _ = get_channel_infos(channel_url)
     
     else:
         channel_img_url, channel_url, channel_name = get_channel_infos(url)
@@ -45,7 +45,7 @@ if "youtube" in url or "youtu.be" in url:
             "selim": {"checkbox": selim},
         }
 
-        res1, created_channel_id = create_kanal(kanal_data, channel_img_url)
+        res1, created_channel_id = create_channel(kanal_data, channel_img_url)
         print(res1)
 
 
