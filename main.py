@@ -101,6 +101,37 @@ elif "marketplace.visualstudio.com" in url:
     webbrowser.open(f"https://www.notion.so/selimdilsadercn/Vs-Code-Eklentileri-531399ee6fed46aba2c9ae1211fbc355")
 
 
+elif "npmjs" in url:
+    print("işlem: npm paketi")
+    title = url.split("package/")[1]
+    print(title)
+
+    website_url = get_website_from_npm(url)
+    favicon, assets = get_favicon(website_url)
+
+    print(favicon)
+
+    created_data_id = ""
+    try:
+        created_data_id = get_npm_package(url)
+
+    except:
+        data = {
+            "İsim": {"title": [{"text": {"content": title}}]},
+            "Npm Url": {"url": url},
+            "Assets": {"rich_text": [{"text": {"content": assets}}]},
+            "selim": {"checkbox": selim},
+        }
+
+        print(data, favicon)
+
+        res, created_data_id = create_npm_package(data, favicon)
+        print(res)
+
+    created_data_id = created_data_id.replace("-", "")
+    webbrowser.open(f"https://www.notion.so/selimdilsadercn/Npm-K-t-phaneleri-0e11fd8e50554ec9b3d9ebef52213f30?p={created_data_id}&pm=c")
+
+
 elif "github.com" in url:
     print("işlem: github")
     title, description = get_repo_infos(url)
@@ -146,7 +177,7 @@ else:
             "İsim": {"title": [{"text": {"content": title}}]},
             "Description": {"rich_text": [{"text": {"content": description}}]},
             "assets": {"rich_text": [{"text": {"content": assets}}]},
-            "Web": {"url": url},
+            "Web": {"url": url},    
             "Tür": {"multi_select": [{"name": "Web", "color": "default"}]},
             "selim": {"checkbox": selim},
         }
