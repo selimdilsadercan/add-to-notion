@@ -197,12 +197,13 @@ def create_npm_package(properties, icon_url):
     payload = {"parent": {"database_id": NPM_DATABASE}, "properties": properties, "icon": icon}
 
     res = requests.post(create_url, headers=headers, json=payload)
+
     return res, res.json()["id"]
 
 
 
 if __name__ == "__main__":
-    print(create_channel(
-        {'İsim': {'title': [{'text': {'content': 'Sagopa Kajmer - Topic'}}]}, 'URL': {'url': 'https://www.youtube.com/channel/UCby21dqpwR_c8okl3K85_7A'}, 'selim': {'checkbox': True}},
-        "https://yt3.googleusercontent.com/QjtZ8P0nFMWnNRjOkpPO-psZDxWDW89gZbhMaKqMYswLMJ2tnMBlELOGS18koAV_10pQsIGy1Q=s176-c-k-c0x00ffffff-no-rj" 
+    print(create_npm_package(
+        {'İsim': {'title': [{'text': {'content': '@editorjs/editorjs'}}]}, 'Npm Url': {'url': 'https://www.npmjs.com/package/@editorjs/editorjs'}, 'assets': {'rich_text': [{'text': {'content': 'https://editorjs.io/og-image.png - https://editorjs.io/favicon.png'}}]}, 'selim': {'checkbox': True}},
+        "https://editorjs.io/og-image.png"
     ))
