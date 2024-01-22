@@ -10,6 +10,7 @@ VIDEO_DATABASE= os.getenv('VIDEO_DATABASE')
 CHANNEL_DATABASE = os.getenv('CHANNEL_DATABASE')
 WEBSITE_DATABASE = os.getenv('WEBSITE_DATABASE')
 VSCODE_ADDON_DATABASE = os.getenv('VSCODE_ADDON_DATABASE')
+CHROME_ADDON_DATABASE = os.getenv('CHROME_ADDON_DATABASE')
 REPO_DATABASE = os.getenv('REPO_DATABASE')
 NPM_DATABASE = os.getenv('NPM_DATABASE')
 
@@ -116,9 +117,9 @@ def create_website(properties, icon_url):
     return res, res.json()["id"]
 
 
-## EKLENTİLER
+## VSCODE EKLENTİLERİ
 
-def get_eklenti(link):
+def get_vscode_eklenti(link):
     url = f"https://api.notion.com/v1/databases/{VSCODE_ADDON_DATABASE}/query"
 
     payload = {"page_size": 1, "filter": {"property": "Link", "url": {"contains": link}}}
@@ -128,7 +129,7 @@ def get_eklenti(link):
 
     return data["results"][0]["id"]
 
-def create_eklenti(properties, icon_url):
+def create_vscode_eklenti(properties, icon_url):
     icon =  {
         "type": "external", 
         "external": {
@@ -139,6 +140,35 @@ def create_eklenti(properties, icon_url):
     create_url = "https://api.notion.com/v1/pages"
 
     payload = {"parent": {"database_id": VSCODE_ADDON_DATABASE}, "properties": properties, "icon": icon}
+
+    res = requests.post(create_url, headers=headers, json=payload)
+    return res, res.json()["id"]
+
+
+## CHROME EKLENTİLERİ
+
+def get_chrome_eklenti(link):
+    url = f"https://api.notion.com/v1/databases/{CHROME_ADDON_DATABASE}/query"
+
+    payload = {"page_size": 1, "filter": {"property": "Link", "url": {"contains": link}}}
+    response = requests.post(url, json=payload, headers=headers)
+
+    data = response.json()
+
+    return data["results"][0]["id"]
+
+
+def create_chrome_eklenti(properties, icon_url):
+    icon =  {
+        "type": "external", 
+        "external": {
+            "url": icon_url
+        }
+    }
+
+    create_url = "https://api.notion.com/v1/pages"
+
+    payload = {"parent": {"database_id": CHROME_ADDON_DATABASE}, "properties": properties, "icon": icon}
 
     res = requests.post(create_url, headers=headers, json=payload)
     return res, res.json()["id"]
