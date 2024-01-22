@@ -29,13 +29,24 @@ def get_website_name(url):
         return url.split(".")[0].split("://")[1].title() if "www." not in url else url.split(".")[1]
 
 
-def get_eklenti_infos(url):
+def get_vscode_eklenti_infos(url):
     response = requests.get(url)
     response.raise_for_status()
     soup = BeautifulSoup(response.text, 'html.parser')
 
     title = soup.find('span', class_="ux-item-name").text
     imageUrl = soup.find('img', class_="image-display")["src"]
+
+    return title, imageUrl
+
+
+def get_chrome_eklenti_infos(url):
+    response = requests.get(url)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    title = soup.find('h1').text
+    imageUrl = soup.find('img')["src"]
 
     return title, imageUrl
 
@@ -53,3 +64,7 @@ def get_repo_infos(url):
         description = ""
 
     return title, description
+
+
+if __name__ == "__main__":
+    print(get_chrome_eklenti_infos("https://chromewebstore.google.com/detail/bdinnpkeobbminaekbnbdmdnlnfahbbh"))

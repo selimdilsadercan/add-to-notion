@@ -79,12 +79,12 @@ if "youtube" in url or "youtu.be" in url:
 
 elif "marketplace.visualstudio.com" in url:
     print("işlem: vscode eklentisi")
-    title, imageUrl = get_eklenti_infos(url)
+    title, imageUrl = get_vscode_eklenti_infos(url)
     print(title)
 
     created_data_id = ""
     try:
-        created_data_id = get_eklenti(url)
+        created_data_id = get_vscode_eklenti(url)
 
     except:
         data = {
@@ -94,11 +94,34 @@ elif "marketplace.visualstudio.com" in url:
             "selim": {"checkbox": selim},
         }
 
-        res, created_data_id = create_eklenti(data, imageUrl)
+        res, created_data_id = create_vscode_eklenti(data, imageUrl)
         print(res)
 
     created_data_id = created_data_id.replace("-", "")
     webbrowser.open(f"https://www.notion.so/selimdilsadercn/Vs-Code-Eklentileri-531399ee6fed46aba2c9ae1211fbc355")
+
+
+elif "chromewebstore" in url:
+    print("işlem: chrome eklentisi")
+    title, imageUrl = get_chrome_eklenti_infos(url)
+    print(title)
+
+    created_data_id = ""
+    try:
+        created_data_id = get_chrome_eklenti(url)
+
+    except:
+        data = {
+            "İsim": {"title": [{"text": {"content": title}}]},
+            "Link": {"url": url},
+            "selim": {"checkbox": selim},
+        }
+
+        res, created_data_id = create_chrome_eklenti(data, imageUrl)
+        print(res)
+
+    created_data_id = created_data_id.replace("-", "")
+    webbrowser.open(f"https://www.notion.so/selimdilsadercn/Chrome-Extensions-bf50c97168bc40dab74557c8d503a345?p={created_data_id}&pm=c")
 
 
 elif "npmjs" in url:
