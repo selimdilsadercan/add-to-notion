@@ -2,7 +2,6 @@ from notion import *
 from youtube import *
 from utils import *
 from scraper import *
-from website import *
 from gpt import *
 from pyperclip import waitForNewPaste
 import webbrowser
@@ -76,6 +75,28 @@ if "youtube" in url or "youtu.be" in url:
         webbrowser.open(f"https://www.notion.so/selimdilsadercn/Kanallar-4ce985c43cf149a285a417307baf4f3f?p={created_channel_id}&pm=c")
 
 
+elif "instagram" in url:
+    print("işlem: instagram hesabı")
+    title, imageUrl = get_vscode_eklenti_infos(url)
+    print(title)
+
+    created_data_id = ""
+    try:
+        created_data_id = get_vscode_eklenti(url)
+
+    except:
+        data = {
+            "İsim": {"title": [{"text": {"content": title}}]},
+            "Link": {"url": url},
+            "Tags": {"multi_select": [{"name": "Diğer", "color": "default"}]},
+            "selim": {"checkbox": selim},
+        }
+
+        res, created_data_id = create_vscode_eklenti(data, imageUrl)
+        print(res)
+
+    created_data_id = created_data_id.replace("-", "")
+    webbrowser.open(f"https://www.notion.so/selimdilsadercn/Vs-Code-Eklentileri-531399ee6fed46aba2c9ae1211fbc355")
 
 elif "marketplace.visualstudio.com" in url:
     print("işlem: vscode eklentisi")
